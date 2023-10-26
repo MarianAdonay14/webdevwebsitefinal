@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User - Announcement Page</title>
+  <style>
+     body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f0f0f0;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    #announcements {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .announcement {
+      padding: 20px;
+      border: 1px solid #ccc;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      background-color: #ffffff;
+    }
+    .announcement strong {
+      color: #333;
+    }
+    .reaction-buttons {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 10px;
+    }
+    .reaction-button {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      cursor: pointer;
+      background-color: #f9f9f9;
+      transition: background-color 0.3s ease;
+    }
+    .reaction-button:hover {
+      background-color: #e0e0e0;
+    }
+    .reply-button {
+      margin-top: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      cursor: pointer;
+      background-color: #f9f9f9;
+      transition: background-color 0.3s ease;
+    }
+
+    .reply-button:hover {
+      background-color: #e0e0e0;
+    }
+
+    .reply-box {
+      margin-top: 10px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>User - Announcement Page</h1>
+
+  <div id="announcements">
+    <h2>Announcements</h2>
+    <div id="announcementList"></div>
+  </div>
+
+  <script>
+    // Retrieve announcements from localStorage
+    const announcements = JSON.parse(localStorage.getItem('announcements')) || [];
+
+    // Display announcements on the user page
+    const announcementList = document.getElementById('announcementList');
+    announcements.forEach((announcement, index) => {
+      const announcementDiv = document.createElement('div');
+      announcementDiv.className = 'announcement';
+      announcementDiv.innerHTML = `<strong>${announcement.timestamp}</strong><br>${announcement.content}
+        <div class="reaction-buttons">
+          <button class="reaction-button" onclick="reactToAnnouncement(${index}, 'like')">👍 Like</button>
+          <button class="reaction-button" onclick="reactToAnnouncement(${index}, 'heart')">❤️ Heart</button>
+          <button class="reaction-button" onclick="reactToAnnouncement(${index}, 'sad')">😢 Sad</button>
+          <button class="reaction-button" onclick="reactToAnnouncement(${index}, 'angry')">😠 Angry</button>
+        </div>`;
+      announcementList.appendChild(announcementDiv);
+    });
+
+    function reactToAnnouncement(index, reactionType) {
+      const reactedAnnouncements = JSON.parse(localStorage.getItem('reactedAnnouncements')) || {};
+      reactedAnnouncements[index] = reactedAnnouncements[index] || {};
+      reactedAnnouncements[index][reactionType] = (reactedAnnouncements[index][reactionType] || 0) + 1;
+
+      // Save the updated reactions to localStorage
+      localStorage.setItem('reactedAnnouncements', JSON.stringify(reactedAnnouncements));
+
+      // Update the UI to display the reaction count
+      updateReactionCount(index);
+    }
+
+    function updateReactionCount(index) {
+      const reactedAnnouncements = JSON.parse(localStorage.getItem('reactedAnnouncements')) || {};
+      const announcementDiv = document.querySelectorAll('.announcement')[index];
+      if (announcementDiv) {
+        const reactionButtons = announcementDiv.querySelector('.reaction-buttons');
+        if (reactionButtons) {
+          const reactionCounts = reactedAnnouncements[index] || {};
+          Object.keys(reactionCounts).forEach(reactionType => {
+            const button = reactionButtons.querySelector(`button[data-reaction="${reactionType}"]`);
+            if (button) {
+              button.innerHTML = `${getEmoji(reactionType)} ${reactionCounts[reactionType]} ${reactionType.charAt(0).toUpperCase() + reactionType.slice(1)}`;
+            }
+          });
+        }
+      }
+    }
+
+    function getEmoji(reactionType) {
+      switch (reactionType) {
+        case 'like':
+          return '👍';
+        case 'heart':
+          return '❤️';
+        case 'sad':
+          return '😢';
+        case 'angry':
+          return '😠';
+        default:
+          return '';
+      }
+    }
+
+    // Initial update of reaction counts on page load
+    for (let i = 0; i < announcements.length; i++) {
+      updateReactionCount(i);
+    }
+    
+  </script>
+</body>
+</html>

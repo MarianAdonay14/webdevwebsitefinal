@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Logout Page</title>
+</head>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin-right: 10px;
+    cursor: pointer;
+  }
+</style>
+
+</style>
+<body>
+
+  <h1>Are you sure you want to log out?</h1>
+
+  <button onclick="logout()">Yes</button>
+  <button onclick="cancelLogout()">No</button>
+
+  <script>
+    function logout() {
+      // You can perform any logout actions here (e.g., AJAX requests, etc.)
+
+      // Redirect to the PHP logout script
+      window.location.href = "first.html";
+    }
+
+    function cancelLogout() {
+      // Redirect to your home page or any other page
+      window.location.href = "index.html";
+    }
+  </script>
+
+</body>
+</html>

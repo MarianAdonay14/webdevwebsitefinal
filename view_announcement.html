@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>View Announcements</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f0f0f0;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    #announcements {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .announcement {
+      padding: 20px;
+      border: 1px solid #ccc;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      background-color: #ffffff;
+    }
+    .announcement strong {
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>View Announcements</h1>
+
+  <div id="announcements">
+    <h2>Announcements</h2>
+    <div id="announcementList"></div>
+  </div>
+
+  <script>
+    // Retrieve announcements from localStorage
+    const announcements = JSON.parse(localStorage.getItem('announcements')) || [];
+
+    // Display announcements on the user page
+    const announcementList = document.getElementById('announcementList');
+    announcements.forEach((announcement, index) => {
+      const announcementDiv = document.createElement('div');
+      announcementDiv.className = 'announcement';
+      announcementDiv.innerHTML = `<strong>${announcement.timestamp}</strong><br>${announcement.content}`;
+      announcementList.appendChild(announcementDiv);
+    });
+  </script>
+</body>
+</html>
